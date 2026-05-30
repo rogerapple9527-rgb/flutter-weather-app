@@ -11,13 +11,13 @@
 在專案目錄執行：
 
 ```bash
-/opt/homebrew/share/flutter/bin/flutter pub get
+flutter pub get
 ```
 
 Android emulator：
 
 ```bash
-/opt/homebrew/share/flutter/bin/flutter run -d emulator-5554 --dart-define=CWA_AUTHORIZATION=your_api_key
+flutter run -d emulator-5554 --dart-define=CWA_AUTHORIZATION=your_api_key
 ```
 
 iOS simulator：
@@ -25,5 +25,5 @@ iOS simulator：
 ```bash
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-/opt/homebrew/share/flutter/bin/flutter run -d "iPhone 13" --dart-define=CWA_AUTHORIZATION=your_api_key
+flutter run -d "iPhone 13" --dart-define=CWA_AUTHORIZATION=your_api_key
 ```
