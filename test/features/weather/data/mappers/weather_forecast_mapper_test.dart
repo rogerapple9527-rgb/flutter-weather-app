@@ -103,5 +103,28 @@ void main() {
 
       expect(() => mapper.toEntity(response), throwsA(isA<NotFoundFailure>()));
     });
+
+    test('throws parsing failure when success flag is false', () {
+      final response = WeatherResponseModel.fromJson({
+        'success': 'false',
+        'records': {'datasetDescription': '三十六小時天氣預報', 'location': []},
+      });
+
+      expect(() => mapper.toEntity(response), throwsA(isA<ParsingFailure>()));
+    });
+
+    test('throws parsing failure when weather elements are missing', () {
+      final response = WeatherResponseModel.fromJson({
+        'success': 'true',
+        'records': {
+          'datasetDescription': '三十六小時天氣預報',
+          'location': [
+            {'locationName': '臺北市', 'weatherElement': []},
+          ],
+        },
+      });
+
+      expect(() => mapper.toEntity(response), throwsA(isA<ParsingFailure>()));
+    });
   });
 }

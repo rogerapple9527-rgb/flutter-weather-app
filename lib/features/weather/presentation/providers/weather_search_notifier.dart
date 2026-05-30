@@ -34,13 +34,17 @@ final weatherSearchProvider =
     );
 
 class WeatherSearchNotifier extends Notifier<WeatherViewState> {
+  WeatherSearchNotifier([this._overrideUseCase]);
+
+  final GetWeatherForecastUseCase? _overrideUseCase;
   late final GetWeatherForecastUseCase _getWeatherForecastUseCase;
 
   String _query = '';
 
   @override
   WeatherViewState build() {
-    _getWeatherForecastUseCase = ref.watch(getWeatherForecastUseCaseProvider);
+    _getWeatherForecastUseCase =
+        _overrideUseCase ?? ref.watch(getWeatherForecastUseCaseProvider);
     return const WeatherInitial();
   }
 

@@ -4,23 +4,35 @@ import '../../../../core/constants/cwa_api_constants.dart';
 import '../../../../core/error/app_failure.dart';
 import '../models/weather_response_model.dart';
 
+typedef WeatherGetRequest =
+    Future<Response<Map<String, dynamic>>> Function(
+      String path, {
+      Map<String, dynamic>? queryParameters,
+    });
+
 class WeatherRemoteDataSource {
-  const WeatherRemoteDataSource({required this.dio});
+  const WeatherRemoteDataSource({
+    required this.dio,
+    this.authorization = CwaApiConstants.authorization,
+    WeatherGetRequest? getRequest,
+  }) : _getRequest = getRequest;
 
   final Dio dio;
+  final String authorization;
+  final WeatherGetRequest? _getRequest;
 
   Future<WeatherResponseModel> fetchForecast(String locationName) async {
-    if (CwaApiConstants.authorization.isEmpty) {
+    if (authorization.isEmpty) {
       throw const UnknownFailure(
         '缺少中央氣象署授權碼，請用 --dart-define=CWA_AUTHORIZATION=your_api_key 啟動 App。',
       );
     }
 
     try {
-      final response = await dio.get<Map<String, dynamic>>(
+      final response = await (_getRequest ?? dio.get<Map<String, dynamic>>)(
         CwaApiConstants.forecastPath,
         queryParameters: {
-          'Authorization': CwaApiConstants.authorization,
+          'Authorization': authorization,
           'format': CwaApiConstants.jsonFormat,
           'locationName': locationName,
         },
